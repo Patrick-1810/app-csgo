@@ -1,4 +1,4 @@
-package com.example.appcsgo.data.remote
+package com.example.appcsgo.data.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

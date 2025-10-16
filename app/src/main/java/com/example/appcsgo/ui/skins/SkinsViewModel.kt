@@ -1,5 +1,6 @@
-package com.example.appcsgo.viewmodel
+package com.example.appcsgo.ui.skins
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcsgo.data.model.Skin
@@ -7,7 +8,6 @@ import com.example.appcsgo.data.repository.CsgoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import android.util.Log
 
 class SkinsViewModel(
     private val repo: CsgoRepository = CsgoRepository()

@@ -2,7 +2,7 @@ package com.example.appcsgo.data.repository
 
 import com.example.appcsgo.data.model.Skin
 import com.example.appcsgo.data.model.Sticker
-import com.example.appcsgo.data.remote.RetrofitClient
+import com.example.appcsgo.data.api.RetrofitClient
 
 class CsgoRepository {
     private val api = RetrofitClient.apiService

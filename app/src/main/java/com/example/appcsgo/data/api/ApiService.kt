@@ -1,4 +1,4 @@
-package com.example.appcsgo.data.remote
+package com.example.appcsgo.data.api
 
 import com.example.appcsgo.data.model.Skin
 import com.example.appcsgo.data.model.Sticker

@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.appcsgo.viewmodel.SkinsViewModel
+import com.example.appcsgo.ui.skins.SkinsViewModel
 
 class MainActivity : AppCompatActivity() {
 
