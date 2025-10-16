@@ -1,5 +1,6 @@
 package com.example.appcsgo.data.model
 
+import java.io.Serializable
 data class Skin(
     val id: String,
     val name: String,
@@ -14,7 +15,7 @@ data class Skin(
     val souvenir: Boolean?,
     val paint_index: String?,
     val image: String?
-)
+) : Serializable
 
 data class Weapon(val id: String?, val weapon_id: Int?, val name: String?)
 data class Category(val id: String?, val name: String?)
