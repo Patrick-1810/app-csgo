@@ -9,10 +9,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.appcsgo.R
 import com.example.appcsgo.databinding.FragmentSkinsBinding
-import com.example.appcsgo.ui.skins.SkinsViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.example.appcsgo.ui.skins.sticker.StickersFragment
 
 class SkinsFragment : Fragment() {
 
@@ -34,25 +35,21 @@ class SkinsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Configura o adapter
         adapter = SkinsAdapter(emptyList()) { skin ->
             val intent = Intent(requireContext(), SkinDetailActivity::class.java)
             intent.putExtra("skin", skin)
             startActivity(intent)
         }
 
-        // Configura o RecyclerView
         binding.rvSkins.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSkins.adapter = adapter
 
-        // Observa as skins filtradas
         lifecycleScope.launch {
             viewModel.filteredSkins.collectLatest {
                 adapter.submitList(it)
             }
         }
 
-        // Configura o campo de busca
         binding.svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.search(query ?: "")
@@ -64,6 +61,13 @@ class SkinsFragment : Fragment() {
                 return true
             }
         })
+
+        binding.btnGoStickers.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, StickersFragment())
+                .addToBackStack("skins_to_stickers")
+                .commit()
+        }
     }
 
     override fun onDestroyView() {
