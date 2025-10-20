@@ -14,6 +14,7 @@ import com.example.appcsgo.databinding.FragmentSkinsBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.example.appcsgo.ui.skins.sticker.StickersFragment
+import com.google.gson.Gson
 
 class SkinsFragment : Fragment() {
 
@@ -36,8 +37,9 @@ class SkinsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = SkinsAdapter(emptyList()) { skin ->
+            val json = Gson().toJson(skin)
             val intent = Intent(requireContext(), SkinDetailActivity::class.java)
-            intent.putExtra("skin", skin)
+            intent.putExtra("skin_json", json)
             startActivity(intent)
         }
 
