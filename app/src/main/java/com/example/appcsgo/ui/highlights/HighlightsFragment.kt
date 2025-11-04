@@ -54,7 +54,6 @@ class HighlightsFragment : Fragment() {
 
         setupSearchView()
 
-        // ADD BOTÃO AQUI DEPOIS
     }
 
     private fun observeViewModel() {
