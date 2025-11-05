@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.example.appcsgo.ui.skins.sticker.StickersFragment
 import com.google.gson.Gson
+import com.example.appcsgo.ui.crates.CratesFragment
 
 class SkinsFragment : Fragment() {
 
@@ -70,6 +71,13 @@ class SkinsFragment : Fragment() {
                 .addToBackStack("skins_to_stickers")
                 .commit()
         }
+        binding.btnGoCrates.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, CratesFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 
     override fun onDestroyView() {

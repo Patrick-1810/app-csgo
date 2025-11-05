@@ -4,6 +4,7 @@ import com.example.appcsgo.data.model.Highlight
 import com.example.appcsgo.data.model.Skin
 import com.example.appcsgo.data.model.Sticker
 import retrofit2.http.GET
+import  com.example.appcsgo.data.model.Crate
 
 interface ApiService {
     @GET("skins.json")
@@ -13,4 +14,8 @@ interface ApiService {
 
     @GET("highlights.json")
     suspend fun getHighlights(): List<Highlight>
+
+    @GET("crates.json")
+    suspend fun getCrates(): List<Crate>
+
 }
