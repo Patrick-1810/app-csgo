@@ -76,6 +76,9 @@ dependencies {
     // Material
     implementation ("com.google.android.material:material:1.9.0")
 
+    // CardView
+    implementation("androidx.cardview:cardview:1.0.0")
+
     implementation("io.coil-kt:coil:2.4.0")
 
 }
