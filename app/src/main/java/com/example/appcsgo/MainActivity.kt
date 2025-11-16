@@ -3,7 +3,7 @@ package com.example.appcsgo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.appcsgo.ui.skins.SkinsFragment
-
+import com.example.appcsgo.ui.home.HomeFragment
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SkinsFragment())
+                .replace(R.id.fragment_container, HomeFragment())
                 .commit()
         }
     }

@@ -13,7 +13,7 @@ import com.example.appcsgo.R
 import com.example.appcsgo.databinding.FragmentSkinsBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.example.appcsgo.ui.skins.sticker.StickersFragment
+import com.example.appcsgo.ui.sticker.StickersFragment
 import com.google.gson.Gson
 import com.example.appcsgo.ui.crates.CratesFragment
 
@@ -21,7 +21,6 @@ class SkinsFragment : Fragment() {
 
     private var _binding: FragmentSkinsBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel = SkinsViewModel()
     private lateinit var adapter: SkinsAdapter
 

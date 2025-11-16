@@ -1,5 +1,7 @@
 package com.example.appcsgo.ui.skins
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
@@ -7,6 +9,7 @@ import com.example.appcsgo.R
 import com.example.appcsgo.databinding.ActivitySkinDetailBinding
 import com.example.appcsgo.data.model.Skin
 import com.google.gson.Gson
+
 class SkinDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySkinDetailBinding
@@ -15,8 +18,8 @@ class SkinDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySkinDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val json = intent.getStringExtra("skin_json")
+        
+        val json = intent.getStringExtra(EXTRA_JSON)
         val skin = Gson().fromJson(json, Skin::class.java)
 
         if (skin != null) {
@@ -31,6 +34,17 @@ class SkinDetailActivity : AppCompatActivity() {
             }
         } else {
             binding.tvName.text = "Skin não encontrada"
+        }
+    }
+
+    companion object {
+        private const val EXTRA_JSON = "skin_json"
+
+        fun newIntent(context: Context, skin: Skin): Intent {
+            val intent = Intent(context, SkinDetailActivity::class.java)
+            val json = Gson().toJson(skin)
+            intent.putExtra(EXTRA_JSON, json)
+            return intent
         }
     }
 }
