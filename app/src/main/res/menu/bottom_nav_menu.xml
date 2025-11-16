@@ -17,11 +17,11 @@
         android:icon="@drawable/ic_crate"
         android:title="Crates" />
     <item
+        android:id="@+id/nav_stickers"
+        android:icon="@drawable/ic_profile"
+        android:title="Stickers" />
+    <item
         android:id="@+id/nav_agents"
         android:icon="@drawable/ic_agent"
         android:title="Agents" />
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="Profile" />
 </menu>
