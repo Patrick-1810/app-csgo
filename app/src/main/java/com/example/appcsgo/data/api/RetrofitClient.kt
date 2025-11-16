@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    private const val BASE_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/pt-BR/"
+    private const val BASE_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/"
 
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BASIC

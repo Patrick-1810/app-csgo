@@ -26,7 +26,7 @@
         </activity>
 
         <activity
-            android:name=".ui.skins.sticker.StickerDetailActivity"
+            android:name=".ui.sticker.StickerDetailActivity"
             android:exported="false" />
 
         <activity
