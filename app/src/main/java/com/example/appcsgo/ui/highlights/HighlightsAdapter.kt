@@ -1,47 +1,53 @@
 package com.example.appcsgo.ui.highlights
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.appcsgo.R
 import com.example.appcsgo.data.model.Highlight
 import com.example.appcsgo.databinding.ItemHighlightBinding
+import com.google.gson.Gson
 
 class HighlightsAdapter(
-    private var items: List<Highlight> = listOf(),
+    private var highlights: List<Highlight>,
     private val onClick: (Highlight) -> Unit
-) : RecyclerView.Adapter<HighlightsAdapter.VH>() {
+) : RecyclerView.Adapter<HighlightsAdapter.HighlightViewHolder>() {
 
     fun submitList(newList: List<Highlight>) {
-        items = newList
+        highlights = newList
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = ItemHighlightBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return VH(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HighlightViewHolder {
+        val binding = ItemHighlightBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return HighlightViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: HighlightViewHolder, position: Int) {
+        holder.bind(highlights[position])
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount() = highlights.size
 
-    inner class VH(private val binding: ItemHighlightBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(highlight: Highlight) {
-            binding.tvHighlightName.text = highlight.name
+    inner class HighlightViewHolder(
+        private val binding: ItemHighlightBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-            val infoText = "${highlight.tournament_event ?: "N/A"} | ${highlight.map ?: "N/A"}"
-            binding.tvHighlightInfo.text = infoText
+        fun bind(item: Highlight) {
 
-            binding.ivHighlightImage.load(highlight.image) {
-                placeholder(R.drawable.ic_placeholder)
-                error(R.drawable.ic_placeholder)
+            binding.tvHighlightName.text = item.name
+
+            // Carregando thumbnail
+            binding.ivHighlightThumb.load(item.image)
+
+            binding.root.setOnClickListener {
+                onClick(item)
             }
-
-            binding.root.setOnClickListener { onClick(highlight) }
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.example.appcsgo.ui.highlights
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
@@ -16,79 +19,63 @@ class HighlightDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHighlightDetailBinding
 
+    companion object {
+        private const val EXTRA_JSON = "highlight_json"
+
+        fun newIntent(context: Context, highlightJson: String): Intent {
+            return Intent(context, HighlightDetailActivity::class.java).apply {
+                putExtra(EXTRA_JSON, highlightJson)
+            }
+        }
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHighlightDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val json = intent.getStringExtra(HighlightsFragment.EXTRA_HIGHLIGHT_JSON)
+        val json = intent.getStringExtra(EXTRA_JSON)
         val highlight = Gson().fromJson(json, Highlight::class.java)
 
         if (highlight != null) {
             binding.tvName.text = highlight.name
-
-            val eventStage = "${highlight.tournament_event ?: "Evento N/A"} - ${highlight.stage ?: "Estágio N/A"}"
-            binding.tvEventStage.text = eventStage
-
-            val teamsMap = "${highlight.team0 ?: "Time 0"} vs ${highlight.team1 ?: "Time 1"} (${highlight.map ?: "Mapa N/A"})"
-            binding.tvTeamsMap.text = teamsMap
-
-            binding.tvDescription.text = highlight.description ?: "Sem descrição."
-
+            binding.tvEventStage.text = "${highlight.tournament_event} - ${highlight.stage}"
+            binding.tvTeamsMap.text = "${highlight.team0} vs ${highlight.team1} (${highlight.map})"
+            binding.tvDescription.text = highlight.description
 
             if (!highlight.video.isNullOrEmpty()) {
-                loadVideo(highlight.video)
+                loadVideo(highlight.video!!)
             } else {
-
                 showThumbnail(highlight.image)
             }
-
-        } else {
-            binding.tvName.text = "Highlight não encontrado"
-            binding.wvVideoPlayer.visibility = View.GONE
-            binding.ivImage.visibility = View.GONE
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun loadVideo(videoUrl: String) {
+    private fun loadVideo(url: String) {
         binding.wvVideoPlayer.visibility = View.VISIBLE
         binding.ivImage.visibility = View.GONE
 
+        val settings = binding.wvVideoPlayer.settings
+        settings.javaScriptEnabled = true
+        settings.domStorageEnabled = true
+        settings.mediaPlaybackRequiresUserGesture = false
+        settings.cacheMode = WebSettings.LOAD_NO_CACHE
 
-        binding.wvVideoPlayer.settings.javaScriptEnabled = true
-        binding.wvVideoPlayer.settings.domStorageEnabled = true
         binding.wvVideoPlayer.webChromeClient = WebChromeClient()
         binding.wvVideoPlayer.webViewClient = WebViewClient()
 
-        binding.wvVideoPlayer.loadUrl(videoUrl)
+        binding.wvVideoPlayer.loadUrl(url)
     }
 
     private fun showThumbnail(imageUrl: String?) {
-        if (!imageUrl.isNullOrEmpty()) {
-            binding.ivImage.visibility = View.VISIBLE
-            binding.wvVideoPlayer.visibility = View.GONE
+        binding.ivImage.visibility = View.VISIBLE
+        binding.wvVideoPlayer.visibility = View.GONE
 
-            binding.ivImage.load(imageUrl) {
-                crossfade(true)
-                placeholder(R.drawable.ic_placeholder)
-            }
+        binding.ivImage.load(imageUrl ?: "") {
+            placeholder(R.drawable.ic_placeholder)
+            crossfade(true)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.wvVideoPlayer.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.wvVideoPlayer.onResume()
-    }
-
-    override fun onDestroy() {
-        binding.wvVideoPlayer.destroy()
-        super.onDestroy()
     }
 }
