@@ -1,4 +1,4 @@
-package com.example.appcsgo.ui.skins.sticker
+package com.example.appcsgo.ui.sticker
 
 import android.content.Context
 import android.content.Intent

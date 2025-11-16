@@ -11,8 +11,6 @@ class CsgoRepository {
 
     suspend fun fetchSkins(): List<Skin> = api.getSkins()
 
-    suspend fun fetchStickers(): List<Sticker> = api.getStickers()
-
     suspend fun getHighlights(): Result<List<Highlight>> = try {
         val highlights = apiService.getHighlights()
         Result.success(highlights)

@@ -1,4 +1,4 @@
-package com.example.appcsgo.ui.skins.sticker
+package com.example.appcsgo.ui.sticker
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

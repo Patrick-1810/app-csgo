@@ -1,4 +1,4 @@
-package com.example.appcsgo.ui.skins.sticker
+package com.example.appcsgo.ui.sticker
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.appcsgo.R
 import com.example.appcsgo.ui.skins.SkinsFragment
 
@@ -23,8 +24,8 @@ class StickersFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_stickers)
-        val sv = view.findViewById<androidx.appcompat.widget.SearchView>(R.id.sv_search)
+        val rv = view.findViewById<RecyclerView>(R.id.rv_stickers)
+        val sv = view.findViewById<SearchView>(R.id.sv_search)
         val btnBack = view.findViewById<Button>(R.id.btn_back_skins)
 
         viewModel = ViewModelProvider(this, StickersViewModelFactory())
