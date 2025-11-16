@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.crates.CratesFragment">
+    android:background="#0F0F0F">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/sv_search_crates"
@@ -14,9 +14,10 @@
         android:queryHint="Busque crates..."
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="8dp"/>
 
-    <!-- Lista de crates -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCrates"
         android:layout_width="0dp"
@@ -24,16 +25,15 @@
         app:layout_constraintTop_toBottomOf="@id/sv_search_crates"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
 
-<Button
-        android:id="@+id/btn_back_skins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Skins"
-        android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:paddingHorizontal="8dp"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
 
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        tools:listitem="@layout/item_crate"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
