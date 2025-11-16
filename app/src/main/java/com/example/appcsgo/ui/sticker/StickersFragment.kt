@@ -4,18 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appcsgo.R
-import com.example.appcsgo.ui.skins.SkinsFragment
 
 class StickersFragment : Fragment() {
-
     private lateinit var viewModel: StickersViewModel
     private lateinit var adapter: StickersAdapter
 
@@ -26,7 +22,6 @@ class StickersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val rv = view.findViewById<RecyclerView>(R.id.rv_stickers)
         val sv = view.findViewById<SearchView>(R.id.sv_search)
-        val btnBack = view.findViewById<Button>(R.id.btn_back_skins)
 
         viewModel = ViewModelProvider(this, StickersViewModelFactory())
             .get(StickersViewModel::class.java)
@@ -35,7 +30,7 @@ class StickersFragment : Fragment() {
             startActivity(StickerDetailActivity.intent(requireContext(), sticker))
         }
 
-        rv.layoutManager = LinearLayoutManager(requireContext())
+        rv.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 2)
         rv.adapter = adapter
         rv.setHasFixedSize(true)
 
@@ -55,15 +50,6 @@ class StickersFragment : Fragment() {
                 Toast.makeText(requireContext(), s.error, Toast.LENGTH_SHORT).show()
             }
             adapter.submitList(s.filtered)
-        }
-
-        btnBack?.setOnClickListener {
-            val popped = parentFragmentManager.popBackStackImmediate()
-            if (!popped) {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, SkinsFragment())
-                    .commit()
-            }
         }
     }
 }

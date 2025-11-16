@@ -18,7 +18,6 @@ import com.google.gson.Gson
 import com.example.appcsgo.ui.crates.CratesFragment
 
 class SkinsFragment : Fragment() {
-
     private var _binding: FragmentSkinsBinding? = null
     private val binding get() = _binding!!
     private val viewModel = SkinsViewModel()
@@ -43,7 +42,7 @@ class SkinsFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.rvSkins.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvSkins.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 2)
         binding.rvSkins.adapter = adapter
 
         lifecycleScope.launch {
@@ -63,20 +62,6 @@ class SkinsFragment : Fragment() {
                 return true
             }
         })
-
-        binding.btnGoStickers.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, StickersFragment())
-                .addToBackStack("skins_to_stickers")
-                .commit()
-        }
-        binding.btnGoCrates.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, CratesFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
     }
 
     override fun onDestroyView() {

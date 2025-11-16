@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appcsgo.data.model.Highlight
 import com.example.appcsgo.databinding.FragmentHighlightsBinding
 import com.google.gson.Gson
@@ -47,7 +46,7 @@ class HighlightsFragment : Fragment() {
         }
 
 
-        binding.recyclerViewHighlights.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewHighlights.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 2)
         binding.recyclerViewHighlights.adapter = adapter
 
         observeViewModel()
