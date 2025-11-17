@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appcsgo.data.repository.QuickAccessRepository
 import com.example.appcsgo.databinding.FragmentHomeBinding
+import com.example.appcsgo.ui.agents.AgentDetailActivity
+import com.example.appcsgo.ui.agents.AgentsAdapter
 import com.example.appcsgo.ui.crates.CratesAdapter
 import com.example.appcsgo.ui.highlights.HighlightDetailActivity
 import com.example.appcsgo.ui.highlights.HighlightsAdapter
@@ -34,7 +36,7 @@ class HomeFragment : Fragment() {
     private lateinit var stickersAdapter: StickersAdapter
     private lateinit var latestHighlightsAdapter: HighlightsAdapter
     private lateinit var quickAccessAdapter: QuickAccessAdapter
-    //private lateinit var agentsAdapter: AgentsAdapter
+    private lateinit var agentsAdapter: AgentsAdapter
 
     private val quickAccessRepository by lazy {
         QuickAccessRepository.getInstance(requireContext())
@@ -61,9 +63,7 @@ class HomeFragment : Fragment() {
 
         // -------- QUICK ACCESS --------
         quickAccessAdapter = QuickAccessAdapter { item ->
-            // por enquanto só abre um Toast ou deixa vazio;
-            // depois dá pra fazer when(item.type) e abrir cada detalhe certinho
-            // Toast.makeText(requireContext(), "Quick: ${item.title}", Toast.LENGTH_SHORT).show()
+
         }
 
         binding.quickAccessRecycler.apply {
@@ -102,11 +102,13 @@ class HomeFragment : Fragment() {
         }
 
         // -------- AGENTS --------
-//        agentsAdapter = AgentsAdapter()
-//        binding.agentsRecycler.apply {
-//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//            adapter = agentsAdapter
-//        }
+        agentsAdapter = AgentsAdapter() { agent ->
+            startActivity(AgentDetailActivity.newIntent(requireContext(), agent))
+        }
+        binding.featuredAgentsRecycler.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = agentsAdapter
+        }
 
         // -------- STICKERS --------
         stickersAdapter = StickersAdapter { sticker ->
@@ -129,7 +131,7 @@ class HomeFragment : Fragment() {
                 newCratesAdapter.updateList(state.newCrates)
                 popularSkinsAdapter.submitList(state.popularSkins)
                 latestHighlightsAdapter.submitList(state.highlights)
-                //agentsAdapter.submitList(state.agents)
+                agentsAdapter.submitList(state.agents)
                 stickersAdapter.submitList(state.stickers)
             }
         }

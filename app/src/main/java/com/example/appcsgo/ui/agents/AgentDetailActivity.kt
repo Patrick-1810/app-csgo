@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.example.appcsgo.R
 import com.example.appcsgo.data.model.Agent
-import com.example.appcsgo.databinding.ActivityAgentDetailBinding // Assumindo este nome
+import com.example.appcsgo.databinding.ActivityAgentDetailBinding
 
 class AgentDetailActivity : AppCompatActivity() {
 
@@ -56,7 +56,6 @@ class AgentDetailActivity : AppCompatActivity() {
                 try {
                     binding.tvRarity.setTextColor(Color.parseColor(colorHex))
                 } catch (e: IllegalArgumentException) {
-                    // Cor padrão se o Hex for inválido
                     binding.tvRarity.setTextColor(Color.WHITE)
                 }
             }

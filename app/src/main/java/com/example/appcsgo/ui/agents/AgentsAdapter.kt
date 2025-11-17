@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.appcsgo.R
 import com.example.appcsgo.data.model.Agent
-import com.example.appcsgo.databinding.ItemAgentBinding // Necessário criar o layout XML
+import com.example.appcsgo.databinding.ItemAgentBinding
 
 class AgentsAdapter(private val onClick: (Agent) -> Unit) :
     ListAdapter<Agent, AgentsAdapter.AgentViewHolder>(AgentDiffCallback()) {

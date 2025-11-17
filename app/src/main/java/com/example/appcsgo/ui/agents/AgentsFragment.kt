@@ -25,27 +25,21 @@ class AgentsFragment : Fragment() {
     ): View {
         _binding = FragmentAgentsBinding.inflate(inflater, container, false)
 
-        // 1. Inicializa o ViewModel e Factory
-        // Usamos CsgoRepository, que não precisa de ApiService no construtor (como no HomeViewModelFactory)
         val repository = CsgoRepository()
         val factory = AgentsViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[AgentsViewModel::class.java]
 
-        // 2. Inicializa o Adapter (reusa o AgentsAdapter)
         adapter = AgentsAdapter() { agent ->
             startActivity(AgentDetailActivity.newIntent(requireContext(), agent))
         }
 
-        // 3. Configura o RecyclerView
         binding.recyclerViewAgents.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerViewAgents.adapter = adapter
 
-        // 4. Observa a lista filtrada
         viewModel.filteredAgents.observe(viewLifecycleOwner) { filtered ->
             adapter.submitList(filtered)
         }
 
-        // 5. Configura a busca/filtro (similar ao CratesFragment)
         binding.svSearchAgents.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
@@ -55,7 +49,6 @@ class AgentsFragment : Fragment() {
             }
         })
 
-        // 6. Carrega os dados
         viewModel.fetchAgents()
         return binding.root
     }
