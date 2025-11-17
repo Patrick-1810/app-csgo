@@ -1,0 +1,52 @@
+package com.example.appcsgo.ui.agents
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.appcsgo.R
+import com.example.appcsgo.data.model.Agent
+import com.example.appcsgo.databinding.ItemAgentBinding // Necessário criar o layout XML
+
+class AgentsAdapter(private val onClick: (Agent) -> Unit) :
+    ListAdapter<Agent, AgentsAdapter.AgentViewHolder>(AgentDiffCallback()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AgentViewHolder {
+        val binding = ItemAgentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AgentViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: AgentViewHolder, position: Int) {
+        val agent = getItem(position)
+        holder.bind(agent, onClick)
+    }
+
+    class AgentViewHolder(private val binding: ItemAgentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(agent: Agent, onClick: (Agent) -> Unit) {
+            binding.tvAgentName.text = agent.name
+
+            Glide.with(binding.ivAgentImage.context)
+                .load(agent.image)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(binding.ivAgentImage)
+
+            itemView.setOnClickListener {
+                onClick(agent)
+            }
+        }
+    }
+
+    private class AgentDiffCallback : DiffUtil.ItemCallback<Agent>() {
+        override fun areItemsTheSame(oldItem: Agent, newItem: Agent): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Agent, newItem: Agent): Boolean {
+            return oldItem == newItem
+        }
+    }
+}

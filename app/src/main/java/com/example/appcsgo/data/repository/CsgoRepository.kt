@@ -5,7 +5,7 @@ import com.example.appcsgo.data.model.Sticker
 import com.example.appcsgo.data.api.RetrofitClient
 import com.example.appcsgo.data.api.RetrofitClient.apiService
 import com.example.appcsgo.data.model.Highlight
-
+import com.example.appcsgo.data.model.Agent
 class CsgoRepository {
     private val api = RetrofitClient.apiService
 
@@ -17,5 +17,7 @@ class CsgoRepository {
     } catch (e: Exception) {
         Result.failure(e)
     }
+
+    suspend fun getAgents(): List<Agent> = api.getAgents()
 
 }

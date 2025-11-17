@@ -4,6 +4,7 @@ package com.example.appcsgo.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appcsgo.data.model.Agent
 import com.example.appcsgo.data.model.Crate
 import com.example.appcsgo.data.model.Highlight
 import com.example.appcsgo.data.model.Skin
@@ -22,7 +23,7 @@ data class HomeState(
     val popularSkins: List<Skin> = emptyList(),
     val stickers: List<Sticker> = emptyList(),
     val highlights: List<Highlight> = emptyList(),
-    //val agents: List<Agent> = emptyList()
+    val agents: List<Agent> = emptyList()
 )
 
 
@@ -46,7 +47,7 @@ class HomeViewModel(
                 val skins = csgoRepository.fetchSkins().take(5)
                 val highlightsResult = csgoRepository.getHighlights()
                 val highlights = highlightsResult.getOrNull()?.take(5) ?: emptyList()
-                //val agents = csgoRepository.getAgents().take(5)
+                val agents = csgoRepository.getAgents().take(5)
                 val stickers = stickersRepository.fetchAll().take(5)
 
                 _state.value = _state.value.copy(
@@ -54,7 +55,7 @@ class HomeViewModel(
                     newCrates = crates,
                     popularSkins = skins,
                     highlights = highlights,
-                    //agents = agents,
+                    agents = agents,
                     stickers = stickers
                 )
 

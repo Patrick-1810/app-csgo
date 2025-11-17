@@ -1,5 +1,6 @@
 package com.example.appcsgo.data.api
 
+import com.example.appcsgo.data.model.Agent
 import com.example.appcsgo.data.model.Highlight
 import com.example.appcsgo.data.model.Skin
 import com.example.appcsgo.data.model.Sticker
@@ -18,4 +19,6 @@ interface ApiService {
     @GET("crates.json")
     suspend fun getCrates(): List<Crate>
 
+    @GET("agents.json")
+    suspend fun getAgents(): List<Agent>
 }
