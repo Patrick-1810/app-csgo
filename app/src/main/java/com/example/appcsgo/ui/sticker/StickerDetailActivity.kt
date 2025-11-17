@@ -6,16 +6,32 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.example.appcsgo.R
 import com.example.appcsgo.data.model.Sticker
 import com.google.gson.Gson
+
 
 class StickerDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sticker_detail)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar_sticker_detail) // Ou binding.toolbarStickerDetail
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = ""
+        }
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
 
         val json = intent.getStringExtra(EXTRA_JSON) ?: ""
         val sticker = Gson().fromJson(json, Sticker::class.java)
