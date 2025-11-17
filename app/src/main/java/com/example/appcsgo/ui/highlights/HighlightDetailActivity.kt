@@ -9,11 +9,13 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import coil.load
 import com.example.appcsgo.R
 import com.example.appcsgo.data.model.Highlight
 import com.example.appcsgo.databinding.ActivityHighlightDetailBinding
 import com.google.gson.Gson
+
 
 class HighlightDetailActivity : AppCompatActivity() {
 
@@ -32,8 +34,25 @@ class HighlightDetailActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityHighlightDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // -- SETA --
+        val toolbar: Toolbar = binding.toolbarHighlightDetail
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = ""
+        }
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+
 
         val json = intent.getStringExtra(EXTRA_JSON)
         val highlight = Gson().fromJson(json, Highlight::class.java)
