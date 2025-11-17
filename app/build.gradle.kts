@@ -71,6 +71,7 @@ dependencies {
 
     // Glide para imagens
     implementation ("com.github.bumptech.glide:glide:4.15.1")
+    androidTestImplementation(libs.androidx.core.testing)
     kapt ("com.github.bumptech.glide:compiler:4.15.1")
 
     // Material
@@ -81,4 +82,8 @@ dependencies {
 
     implementation("io.coil-kt:coil:2.4.0")
 
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
 }
