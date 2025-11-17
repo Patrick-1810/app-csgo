@@ -24,7 +24,7 @@ class QuickAccessAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: QuickAccessItem) {
-            binding.quickAccessTitle.text = item.title
+            binding.quickAccessTitle.text = item.title ?: ""
 
             Glide.with(binding.root)
                 .load(item.imageUrl)

@@ -32,6 +32,10 @@ class QuickAccessRepository private constructor(context: Context) {
         prefs.edit().putString(KEY_ITEMS, json).apply()
     }
 
+    fun clearQuickAccess() {
+        prefs.edit().remove(KEY_ITEMS).apply()
+    }
+
     companion object {
         private const val PREFS_NAME = "quick_access_prefs"
         private const val KEY_ITEMS = "quick_access_items"

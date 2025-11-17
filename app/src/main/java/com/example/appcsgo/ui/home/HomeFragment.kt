@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.appcsgo.data.repository.QuickAccessRepository
 import com.example.appcsgo.databinding.FragmentHomeBinding
 import com.example.appcsgo.ui.crates.CratesAdapter
-import com.example.appcsgo.ui.skins.SkinsAdapter
-import com.example.appcsgo.ui.skins.SkinDetailActivity
 import com.example.appcsgo.ui.highlights.HighlightDetailActivity
 import com.example.appcsgo.ui.highlights.HighlightsAdapter
+import com.example.appcsgo.ui.skins.SkinDetailActivity
+import com.example.appcsgo.ui.skins.SkinsAdapter
 import com.example.appcsgo.ui.sticker.StickerDetailActivity
 import com.example.appcsgo.ui.sticker.StickersAdapter
 import com.google.gson.Gson
@@ -31,7 +33,12 @@ class HomeFragment : Fragment() {
     private lateinit var popularSkinsAdapter: SkinsAdapter
     private lateinit var stickersAdapter: StickersAdapter
     private lateinit var latestHighlightsAdapter: HighlightsAdapter
+    private lateinit var quickAccessAdapter: QuickAccessAdapter
     //private lateinit var agentsAdapter: AgentsAdapter
+
+    private val quickAccessRepository by lazy {
+        QuickAccessRepository.getInstance(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,14 +59,26 @@ class HomeFragment : Fragment() {
 
     private fun setupAdapters() {
 
-        // ----------------- CRATES -----------------
+        // -------- QUICK ACCESS --------
+        quickAccessAdapter = QuickAccessAdapter { item ->
+            // por enquanto só abre um Toast ou deixa vazio;
+            // depois dá pra fazer when(item.type) e abrir cada detalhe certinho
+            // Toast.makeText(requireContext(), "Quick: ${item.title}", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.quickAccessRecycler.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = quickAccessAdapter
+        }
+
+        // -------- CRATES --------
         newCratesAdapter = CratesAdapter(emptyList())
         binding.newCratesRecycler.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = newCratesAdapter
         }
 
-        // ---------------- SKINS -------------------
+        // -------- SKINS --------
         popularSkinsAdapter = SkinsAdapter(emptyList()) { skin ->
             val json = Gson().toJson(skin)
             val intent = SkinDetailActivity.newIntent(requireContext(), skin)
@@ -71,7 +90,7 @@ class HomeFragment : Fragment() {
             adapter = popularSkinsAdapter
         }
 
-        // ---------------- HIGHLIGHTS --------------
+        // -------- HIGHLIGHTS --------
         latestHighlightsAdapter = HighlightsAdapter(emptyList()) { highlight ->
             val json = Gson().toJson(highlight)
             val intent = HighlightDetailActivity.newIntent(requireContext(), json)
@@ -82,14 +101,14 @@ class HomeFragment : Fragment() {
             adapter = latestHighlightsAdapter
         }
 
-        // ----------------- AGENTS ------------------
+        // -------- AGENTS --------
 //        agentsAdapter = AgentsAdapter()
 //        binding.agentsRecycler.apply {
 //            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 //            adapter = agentsAdapter
 //        }
 
-        // ----------------- STICKERS -----------------
+        // -------- STICKERS --------
         stickersAdapter = StickersAdapter { sticker ->
             startActivity(StickerDetailActivity.intent(requireContext(), sticker))
         }
@@ -103,27 +122,25 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
 
-                // ---------- ERRO ----------
                 if (state.error != null) {
                     Toast.makeText(context, state.error, Toast.LENGTH_LONG).show()
                 }
 
-                // ---------- CRATES ----------
                 newCratesAdapter.updateList(state.newCrates)
-
-                // ---------- SKINS ----------
                 popularSkinsAdapter.submitList(state.popularSkins)
-
-                // ---------- HIGHLIGHTS ----------
                 latestHighlightsAdapter.submitList(state.highlights)
-
-                // ---------- AGENTS ----------
                 //agentsAdapter.submitList(state.agents)
-
-                // ---------- STICKERS ----------
                 stickersAdapter.submitList(state.stickers)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val items = quickAccessRepository.getQuickAccessItems()
+        quickAccessAdapter.submitList(items)
+        binding.quickAccessRecycler.isVisible = items.isNotEmpty()
+        binding.quickAccessTitle.isVisible = items.isNotEmpty()
     }
 
     override fun onDestroyView() {
