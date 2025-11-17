@@ -12,8 +12,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/iv_sticker_image"
@@ -34,30 +34,31 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textColor="#FFFFFF"
                 android:maxLines="2"
-                android:ellipsize="end"/>
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/tv_sticker_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
                 android:layout_marginTop="2dp"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="12sp"
+                android:textColor="#AAAAAA"
                 android:maxLines="1"
-                android:ellipsize="end" />
+                android:ellipsize="end"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_sticker_rarity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
                 android:layout_marginTop="4dp"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
+                android:textSize="12sp"
                 android:textColor="@android:color/white"
                 android:visibility="gone" />
 
@@ -67,10 +68,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:textSize="12sp"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textColor="#AAAAAA"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 

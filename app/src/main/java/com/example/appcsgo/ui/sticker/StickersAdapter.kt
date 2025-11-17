@@ -7,13 +7,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.appcsgo.R
+import com.example.appcsgo.data.model.QuickAccessItem
+import com.example.appcsgo.data.model.QuickAccessType
 import com.example.appcsgo.data.model.Sticker
+import com.example.appcsgo.data.repository.QuickAccessRepository
 
 class StickersAdapter(
     private val onClick: (Sticker) -> Unit
@@ -51,7 +55,7 @@ class StickersAdapter(
 
         val rarityName = s.rarity?.name
         val rarityColor = s.rarity?.color
-        if (!rarityName.isNullOrBlank()) {
+        if (!rarityName.isNullOrBlank() && !rarityName.equals("Default", ignoreCase = true)) {
             h.rarity.text = rarityName
             h.rarity.visibility = View.VISIBLE
             if (!rarityColor.isNullOrBlank()) {
@@ -66,13 +70,31 @@ class StickersAdapter(
         }
 
         if (!s.description.isNullOrBlank()) {
-            h.desc.text = s.description
+            val plainText = HtmlCompat
+                .fromHtml(s.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                .toString()
+
+            h.desc.text = plainText
             h.desc.visibility = View.VISIBLE
         } else {
             h.desc.visibility = View.GONE
         }
 
         Glide.with(h.iv).load(s.image).into(h.iv)
-        h.card.setOnClickListener { onClick(s) }
+
+        val context = h.itemView.context
+
+        h.card.setOnClickListener {
+            val repo = QuickAccessRepository.getInstance(context)
+            val item = QuickAccessItem(
+                id = s.id.toString(),
+                title = s.name,
+                imageUrl = s.image,
+                type = QuickAccessType.STICKER
+            )
+            repo.addQuickAccessItem(item)
+            onClick(s)
+        }
     }
+
 }

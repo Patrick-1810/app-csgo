@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.appcsgo.R
+import com.example.appcsgo.data.repository.QuickAccessRepository
 import com.example.appcsgo.data.model.Crate
+import com.example.appcsgo.data.model.QuickAccessItem
+import com.example.appcsgo.data.model.QuickAccessType
 import com.example.appcsgo.databinding.ItemCrateBinding
 
 class CratesAdapter(private var crates: List<Crate>) :
@@ -29,10 +32,19 @@ class CratesAdapter(private var crates: List<Crate>) :
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(holder.binding.ivCrateImage)
 
+        val context = holder.itemView.context
+
         holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
+            val repo = QuickAccessRepository.getInstance(context)
+            val item = QuickAccessItem(
+                id = crate.name,
+                title = crate.name,
+                imageUrl = crate.image,
+                type = QuickAccessType.CRATE
+            )
+            repo.addQuickAccessItem(item)
+
             val intent = Intent(context, CrateDetailActivity::class.java)
-            // Assumindo que o objeto Crate é Parcelable ou Serializable para ser passado no Intent
             intent.putExtra("crate", crate)
             context.startActivity(intent)
         }
@@ -40,13 +52,11 @@ class CratesAdapter(private var crates: List<Crate>) :
 
     override fun getItemCount() = crates.size
 
-    // --- CÓDIGO MODIFICADO ---
     fun updateList(newList: List<Crate>) {
         val diffCallback = CrateDiffCallback(this.crates, newList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-
-        this.crates = newList // Atualiza a lista interna
-        diffResult.dispatchUpdatesTo(this) // Usa as mudanças específicas calculadas
+        this.crates = newList
+        diffResult.dispatchUpdatesTo(this)
     }
 
     private class CrateDiffCallback(
@@ -58,12 +68,10 @@ class CratesAdapter(private var crates: List<Crate>) :
         override fun getNewListSize(): Int = newList.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            // Verifica se o mesmo item (baseado em um ID único, como o nome) está nas duas listas
             return oldList[oldItemPosition].name == newList[newItemPosition].name
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            // Verifica se o conteúdo do item é o mesmo (usando a igualdade padrão do data class)
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }

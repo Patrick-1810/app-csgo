@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.appcsgo.R
+import com.example.appcsgo.data.model.QuickAccessItem
+import com.example.appcsgo.data.model.QuickAccessType
 import com.example.appcsgo.data.model.Skin
 import com.example.appcsgo.databinding.ItemSkinBinding
-
+import com.example.appcsgo.data.repository.QuickAccessRepository
 class SkinsAdapter(
     private var items: List<Skin> = listOf(),
     private val onClick: (Skin) -> Unit
@@ -37,7 +39,20 @@ class SkinsAdapter(
                 placeholder(R.drawable.ic_placeholder)
                 error(R.drawable.ic_placeholder)
             }
-            binding.root.setOnClickListener { onClick(skin) }
+
+            val context = binding.root.context
+
+            binding.root.setOnClickListener {
+                val repo = QuickAccessRepository.getInstance(context)
+                val item = QuickAccessItem(
+                    id = skin.name,
+                    title = skin.name,
+                    imageUrl = skin.image,
+                    type = QuickAccessType.SKIN
+                )
+                repo.addQuickAccessItem(item)
+                onClick(skin)
+            }
         }
     }
 }

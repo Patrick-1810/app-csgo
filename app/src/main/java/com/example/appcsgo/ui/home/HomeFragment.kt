@@ -17,8 +17,6 @@ import com.example.appcsgo.ui.highlights.HighlightDetailActivity
 import com.example.appcsgo.ui.highlights.HighlightsAdapter
 import com.example.appcsgo.ui.sticker.StickerDetailActivity
 import com.example.appcsgo.ui.sticker.StickersAdapter
-import com.example.appcsgo.ui.agents.AgentsAdapter
-import com.example.appcsgo.ui.agents.AgentDetailActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
@@ -33,7 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var popularSkinsAdapter: SkinsAdapter
     private lateinit var stickersAdapter: StickersAdapter
     private lateinit var latestHighlightsAdapter: HighlightsAdapter
-    private lateinit var agentsAdapter: AgentsAdapter
+    //private lateinit var agentsAdapter: AgentsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,13 +83,12 @@ class HomeFragment : Fragment() {
         }
 
         // ----------------- AGENTS ------------------
-        agentsAdapter = AgentsAdapter() { agent ->
-            startActivity(AgentDetailActivity.newIntent(requireContext(), agent))
-        }
-        binding.featuredAgentsRecycler.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = agentsAdapter
-        }
+//        agentsAdapter = AgentsAdapter()
+//        binding.agentsRecycler.apply {
+//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//            adapter = agentsAdapter
+//        }
+
         // ----------------- STICKERS -----------------
         stickersAdapter = StickersAdapter { sticker ->
             startActivity(StickerDetailActivity.intent(requireContext(), sticker))
@@ -121,7 +118,7 @@ class HomeFragment : Fragment() {
                 latestHighlightsAdapter.submitList(state.highlights)
 
                 // ---------- AGENTS ----------
-                agentsAdapter.submitList(state.agents)
+                //agentsAdapter.submitList(state.agents)
 
                 // ---------- STICKERS ----------
                 stickersAdapter.submitList(state.stickers)

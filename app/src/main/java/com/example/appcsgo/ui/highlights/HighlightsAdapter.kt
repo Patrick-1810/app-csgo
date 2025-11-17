@@ -1,13 +1,14 @@
 package com.example.appcsgo.ui.highlights
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.appcsgo.data.model.Highlight
+import com.example.appcsgo.data.model.QuickAccessItem
+import com.example.appcsgo.data.model.QuickAccessType
 import com.example.appcsgo.databinding.ItemHighlightBinding
-import com.google.gson.Gson
+import com.example.appcsgo.data.repository.QuickAccessRepository
 
 class HighlightsAdapter(
     private var highlights: List<Highlight>,
@@ -39,13 +40,20 @@ class HighlightsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Highlight) {
-
             binding.tvHighlightName.text = item.name
-
-            // Carregando thumbnail
             binding.ivHighlightThumb.load(item.image)
 
+            val context = binding.root.context
+
             binding.root.setOnClickListener {
+                val repo = QuickAccessRepository.getInstance(context)
+                val quickItem = QuickAccessItem(
+                    id = item.name,
+                    title = item.name,
+                    imageUrl = item.image,
+                    type = QuickAccessType.HIGHLIGHT
+                )
+                repo.addQuickAccessItem(quickItem)
                 onClick(item)
             }
         }
