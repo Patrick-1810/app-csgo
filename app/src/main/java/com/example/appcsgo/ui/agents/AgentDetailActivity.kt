@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.text.HtmlCompat
 import com.bumptech.glide.Glide
 import com.example.appcsgo.R
 import com.example.appcsgo.data.model.Agent
@@ -50,7 +51,10 @@ class AgentDetailActivity : AppCompatActivity() {
             binding.tvDescription.text = it.description
 
             val rarityName = it.rarity?.name ?: "Desconhecida"
-            binding.tvRarity.text = "Raridade: $rarityName"
+            binding.tvDescription.text = HtmlCompat.fromHtml(
+                it.description,
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
 
             it.rarity?.color?.let { colorHex ->
                 try {
