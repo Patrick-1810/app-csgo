@@ -10,10 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.appcsgo.data.model.Crate
 import com.example.appcsgo.data.repository.QuickAccessRepository
 import com.example.appcsgo.databinding.FragmentHomeBinding
 import com.example.appcsgo.ui.agents.AgentDetailActivity
 import com.example.appcsgo.ui.agents.AgentsAdapter
+import com.example.appcsgo.ui.crates.CrateOpeningActivity
 import com.example.appcsgo.ui.crates.CratesAdapter
 import com.example.appcsgo.ui.highlights.HighlightDetailActivity
 import com.example.appcsgo.ui.highlights.HighlightsAdapter
@@ -38,6 +40,8 @@ class HomeFragment : Fragment() {
     private lateinit var quickAccessAdapter: QuickAccessAdapter
     private lateinit var agentsAdapter: AgentsAdapter
 
+    private var heroCrate: Crate? = null
+
     private val quickAccessRepository by lazy {
         QuickAccessRepository.getInstance(requireContext())
     }
@@ -53,6 +57,7 @@ class HomeFragment : Fragment() {
 
         setupAdapters()
         setupObservers()
+        setupOpenCrateButton()
 
         viewModel.loadHome()
 
@@ -60,25 +65,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupAdapters() {
-
-        // -------- QUICK ACCESS --------
-        quickAccessAdapter = QuickAccessAdapter { item ->
-
-        }
+        quickAccessAdapter = QuickAccessAdapter { item -> }
 
         binding.quickAccessRecycler.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = quickAccessAdapter
         }
 
-        // -------- CRATES --------
         newCratesAdapter = CratesAdapter(emptyList())
         binding.newCratesRecycler.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = newCratesAdapter
         }
 
-        // -------- SKINS --------
         popularSkinsAdapter = SkinsAdapter(emptyList()) { skin ->
             val json = Gson().toJson(skin)
             val intent = SkinDetailActivity.newIntent(requireContext(), skin)
@@ -90,7 +89,6 @@ class HomeFragment : Fragment() {
             adapter = popularSkinsAdapter
         }
 
-        // -------- HIGHLIGHTS --------
         latestHighlightsAdapter = HighlightsAdapter(emptyList()) { highlight ->
             val json = Gson().toJson(highlight)
             val intent = HighlightDetailActivity.newIntent(requireContext(), json)
@@ -101,7 +99,6 @@ class HomeFragment : Fragment() {
             adapter = latestHighlightsAdapter
         }
 
-        // -------- AGENTS --------
         agentsAdapter = AgentsAdapter() { agent ->
             startActivity(AgentDetailActivity.newIntent(requireContext(), agent))
         }
@@ -110,7 +107,6 @@ class HomeFragment : Fragment() {
             adapter = agentsAdapter
         }
 
-        // -------- STICKERS --------
         stickersAdapter = StickersAdapter { sticker ->
             startActivity(StickerDetailActivity.intent(requireContext(), sticker))
         }
@@ -123,7 +119,6 @@ class HomeFragment : Fragment() {
     private fun setupObservers() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
-
                 if (state.error != null) {
                     Toast.makeText(context, state.error, Toast.LENGTH_LONG).show()
                 }
@@ -133,7 +128,19 @@ class HomeFragment : Fragment() {
                 latestHighlightsAdapter.submitList(state.highlights)
                 agentsAdapter.submitList(state.agents)
                 stickersAdapter.submitList(state.stickers)
+
+                heroCrate = state.newCrates.firstOrNull()
             }
+        }
+    }
+
+    private fun setupOpenCrateButton() {
+        binding.openCrateButton.setOnClickListener {
+            val crate = heroCrate ?: return@setOnClickListener
+            val id = crate.id ?: return@setOnClickListener
+            val name = crate.name ?: "Crate"
+            val intent = CrateOpeningActivity.newIntent(requireContext(), id, name)
+            startActivity(intent)
         }
     }
 
