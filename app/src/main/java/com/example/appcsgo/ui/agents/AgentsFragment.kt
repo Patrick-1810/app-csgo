@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.appcsgo.data.repository.CsgoRepository
-import com.example.appcsgo.databinding.FragmentAgentsBinding // Necessário criar o layout XML
+import com.example.appcsgo.databinding.FragmentAgentsBinding
 import com.example.appcsgo.ui.agents.AgentsViewModelFactory
 
 class AgentsFragment : Fragment() {
@@ -38,19 +38,35 @@ class AgentsFragment : Fragment() {
 
         viewModel.filteredAgents.observe(viewLifecycleOwner) { filtered ->
             adapter.submitList(filtered)
+
+
+            if (filtered.isNullOrEmpty()) {
+                binding.tvErrorAgents.visibility = View.VISIBLE
+            } else {
+                binding.tvErrorAgents.visibility = View.GONE
+            }
         }
 
-        binding.svSearchAgents.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = false
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.filterAgents(newText ?: "")
-                return true
-            }
-        })
+        setupSearchView()
 
         viewModel.fetchAgents()
         return binding.root
+    }
+
+
+    private fun setupSearchView() {
+        val searchEditText = binding.svSearchAgents
+
+        searchEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.filterAgents(s.toString())
+            }
+
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+
     }
 
     override fun onDestroyView() {

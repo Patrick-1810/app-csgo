@@ -8,12 +8,13 @@ import androidx.fragment.app.Fragment
 import com.example.appcsgo.data.api.RetrofitClient
 import com.example.appcsgo.data.repository.CratesRepository
 import com.example.appcsgo.databinding.FragmentCratesBinding
-
+import android.widget.EditText
 class CratesFragment : Fragment() {
 
     private lateinit var binding: FragmentCratesBinding
     private lateinit var viewModel: CratesViewModel
     private lateinit var adapter: CratesAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,24 +30,35 @@ class CratesFragment : Fragment() {
         binding.recyclerViewCrates.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 2)
         binding.recyclerViewCrates.adapter = adapter
 
-        viewModel.crates.observe(viewLifecycleOwner) { crates ->
-            adapter.updateList(crates)
-        }
-
         viewModel.filteredCrates.observe(viewLifecycleOwner) { filtered ->
             adapter.updateList(filtered)
+
+            if (filtered.isNullOrEmpty()) {
+                binding.tvErrorCrates.visibility = View.VISIBLE
+            } else {
+                binding.tvErrorCrates.visibility = View.GONE
+            }
         }
 
-        binding.svSearchCrates.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = false
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.filterCrates(newText ?: "")
-                return true
-            }
+        setupSearchView()
 
-        })
         viewModel.fetchCrates()
         return binding.root
+    }
+
+    private fun setupSearchView() {
+
+        val searchEditText = binding.svSearchCrates
+
+        searchEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.filterCrates(s.toString())
+            }
+
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+
     }
 }

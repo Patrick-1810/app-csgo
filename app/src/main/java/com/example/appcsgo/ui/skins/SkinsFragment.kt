@@ -51,15 +51,26 @@ class SkinsFragment : Fragment() {
             }
         }
 
-        binding.svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.search(query ?: "")
-                return true
+        lifecycleScope.launch {
+            viewModel.filteredSkins.collectLatest { skins ->
+                adapter.submitList(skins)
+                if (skins.isEmpty()) {
+                    binding.tvErrorSkins.visibility = View.VISIBLE
+                } else {
+                    binding.tvErrorSkins.visibility = View.GONE
+                }
+            }
+        }
+
+        binding.svSearch.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.search(newText ?: "")
-                return true
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: android.text.Editable?) {
+                viewModel.search(s.toString())
             }
         })
     }

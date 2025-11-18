@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+// A importação de SearchView não é mais necessária se você só usar EditText
+// import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.appcsgo.data.model.Highlight
@@ -40,11 +41,9 @@ class HighlightsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         adapter = HighlightsAdapter(emptyList()) { highlight ->
             navigateToDetail(highlight)
         }
-
 
         binding.recyclerViewHighlights.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 2)
         binding.recyclerViewHighlights.adapter = adapter
@@ -72,17 +71,28 @@ class HighlightsFragment : Fragment() {
     }
 
     private fun setupSearchView() {
-        binding.svSearchHighlights.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.search(query ?: "")
-                return true
+
+        val searchEditText = binding.svSearchHighlights
+
+        searchEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.search(newText ?: "")
-                return true
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: android.text.Editable?) {
+                viewModel.search(s.toString())
             }
         })
+
+        searchEditText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.search(v.text.toString())
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
     }
 
     private fun navigateToDetail(highlight: Highlight) {

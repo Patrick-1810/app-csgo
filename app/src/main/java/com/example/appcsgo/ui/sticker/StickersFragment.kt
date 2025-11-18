@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +22,8 @@ class StickersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val rv = view.findViewById<RecyclerView>(R.id.rv_stickers)
-        val sv = view.findViewById<SearchView>(R.id.sv_search)
+        val sv = view.findViewById<EditText>(R.id.sv_search)
+        val tvError = view.findViewById<TextView>(R.id.tvErrorStickers)
 
         viewModel = ViewModelProvider(this, StickersViewModelFactory())
             .get(StickersViewModel::class.java)
@@ -34,21 +36,26 @@ class StickersFragment : Fragment() {
         rv.adapter = adapter
         rv.setHasFixedSize(true)
 
-        sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.filter(query.orEmpty())
-                return true
+        sv.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.filter(s.toString())
             }
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.filter(newText.orEmpty())
-                return true
-            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
         })
+
+
 
         viewModel.state.observe(viewLifecycleOwner) { s ->
             if (s.error != null) {
                 Toast.makeText(requireContext(), s.error, Toast.LENGTH_SHORT).show()
+                tvError.visibility = View.GONE
+            } else if (s.filtered.isEmpty()) {
+                tvError.visibility = View.VISIBLE
+            } else {
+                tvError.visibility = View.GONE
             }
+
             adapter.submitList(s.filtered)
         }
     }
