@@ -4,7 +4,8 @@ enum class QuickAccessType {
     SKIN,
     STICKER,
     HIGHLIGHT,
-    CRATE
+    CRATE,
+    AGENT
 }
 
 data class QuickAccessItem(

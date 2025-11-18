@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.appcsgo.R
 import com.example.appcsgo.data.model.Agent
+import com.example.appcsgo.data.model.QuickAccessItem
+import com.example.appcsgo.data.model.QuickAccessType
+import com.example.appcsgo.data.repository.QuickAccessRepository
 import com.example.appcsgo.databinding.ItemAgentBinding
 
 class AgentsAdapter(private val onClick: (Agent) -> Unit) :
@@ -34,7 +37,17 @@ class AgentsAdapter(private val onClick: (Agent) -> Unit) :
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(binding.ivAgentImage)
 
+            val context = binding.root.context
+
             itemView.setOnClickListener {
+                val repo = QuickAccessRepository.getInstance(context)
+                val item = QuickAccessItem(
+                    id = agent.id.toString(),
+                    title = agent.name,
+                    imageUrl = agent.image,
+                    type = QuickAccessType.AGENT
+                )
+                repo.addQuickAccessItem(item)
                 onClick(agent)
             }
         }
