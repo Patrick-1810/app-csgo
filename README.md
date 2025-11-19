@@ -11,7 +11,7 @@ Aplicativo desenvolvido para a disciplina de **Desenvolvimento Mobile**, utiliza
 ## 🚀 Funcionalidades Principais
 
 ### 🔽 Barra de Navegação Inferior (Bottom Navbar)
-A aplicação possui uma **Navbar com 7 opções**:
+A aplicação possui uma **Navbar com 6 opções**:
 - **Home**
 - **Skins**
 - **Highlights**
